@@ -1,5 +1,5 @@
 # MDM-SIR (SIR-E3DTV)
-This is code of the iterative reconstruction method at the Section III-E in the [paper](https://doi.org/10.1109/TMI.2020.3001616)  [MDM-PCCT](https://github.com/ldy1995/MDM-PCCT) 
+This is the code of the iterative reconstruction method at Section III-E in [paper](https://doi.org/10.1109/TMI.2020.3001616)  [MDM-PCCT](https://github.com/ldy1995/MDM-PCCT) 
 
 ## Requirements
 * Linux Platform
