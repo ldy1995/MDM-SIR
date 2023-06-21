@@ -13,6 +13,7 @@ This is code of the iterative reconstruction method at the Section III-E in the 
 
 ## Requirements
 
+* Linux Platform
 * MATLAB
 * [IRT](https://web.eecs.umich.edu/~fessler/code/)
 
