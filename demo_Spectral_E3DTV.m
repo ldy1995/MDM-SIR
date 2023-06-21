@@ -88,4 +88,4 @@ I  = frame2im(fr);
 
 % print the image
 imwrite(I, ['img/Results_recon_alpha_', num2str(par.alpha),...
-    '_tau_', num2str(par.tau),'.tif'], 'tif')
+    '_tau_', num2str(par.tau),'.png'], 'png')
