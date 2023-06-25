@@ -125,6 +125,11 @@ for iter = 1:recon_iter
         R(:,i) = R(:,i) * scal(i) ./ post_scal; % scal correction
     end
 
+    ZZ = reshape(R,[M,N,p]);
+    ZZ(ZZ<0) = 0;
+    % inv normalize
+    ZZ = ZZ.*(v_max - v_min) + v_min;
+
     %% -Update U_x and U_y and U_z
     disp(['Update U in iteration ', num2str(iter), 'th ...'])
     tmp_x         = reshape(diff_x(R,sizeD),[M*N,p]);
@@ -150,6 +155,17 @@ for iter = 1:recon_iter
     disp(['Update E in iteration ', num2str(iter), 'th ...'])
     E             = softthre(D-R+Mul1/mu, lambda/mu);
 
+    %% -Update X in cpu version, it costs too much running time
+    disp(['Update X in iteration ', num2str(iter), 'th ...'])
+    for ibin = 1:nbin
+        x_t     = x(:,:,ibin);
+        x_t     = x_t - alpha*(x_t - ZZ(:,:,ibin));
+        g       = G'*(y(:,:,ibin) - G*x_t);
+        Gg      = G*g;
+        lr      = sum(g(:).^2)/sum(Gg(:).^2);
+        x(:,:,ibin) = x_t + lr*g;
+    end
+    
     %% stop criterion
     leq1 = D - R - E;
     leq2 = reshape(diff_x(R,sizeD),[M*N,p])- U_x*V_x';
@@ -166,21 +182,7 @@ for iter = 1:recon_iter
         Mul4 = Mul4 + mu*leq4;
         mu = min(max_mu,mu*rho);
     end
-    ZZ = reshape(R,[M,N,p]);
-    ZZ(ZZ<0) = 0;
-    % inv normalize
-    ZZ = ZZ.*(v_max - v_min) + v_min;
-
-    %% -Update X in cpu version, it costs too much running time
-    disp(['Update X in iteration ', num2str(iter), 'th ...'])
-    for ibin = 1:nbin
-        x_t     = x(:,:,ibin);
-        x_t     = x_t - alpha*(x_t - ZZ(:,:,ibin));
-        g       = G'*(y(:,:,ibin) - G*x_t);
-        Gg      = G*g;
-        lr      = sum(g(:).^2)/sum(Gg(:).^2);
-        x(:,:,ibin) = x_t + lr*g;
-    end
+    
 
 end
 
